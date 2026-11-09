@@ -3,93 +3,105 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Каталог товаров</title>
+  <title>ASTO STUDIO // EXECUTABLE</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-color: #0f0f0f;
-      --card-bg: #1a1a1a;
+      --bg-color: #000000;
+      --card-bg: #121212;
+      --window-border: #444;
       --text-color: #ffffff;
-      --accent-color: #e6e6e6;
-      --btn-bg: #ffffff;
-      --btn-text: #000000;
-      --border-color: #333333;
+      --dim-text: #888888;
+      --accent: #ffffff;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: monospace, -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      padding-bottom: 30px;
+      padding-bottom: 50px;
+      overflow-x: hidden;
     }
 
-    /* Шапка */
+    /* Шапка в стиле ОС / Андеграунд */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 20px;
-      border-bottom: 1px solid var(--border-color);
+      padding: 15px;
+      border-bottom: 2px solid var(--window-border);
+      background: #0a0a0a;
       position: sticky;
       top: 0;
-      background: var(--bg-color);
       z-index: 100;
     }
 
-    .logo {
-      font-weight: 900;
-      font-size: 1.2rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    .nav-btn {
+    .nav-link {
       background: none;
-      border: 1px solid var(--border-color);
+      border: none;
       color: var(--text-color);
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
       font-size: 0.85rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    /* Валюта */
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+
+    .central-logo {
+      width: 45px;
+      height: 45px;
+      border: 1px solid var(--window-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+    }
+
+    .central-logo img {
+      width: 24px;
+      height: 24px;
+      filter: invert(1);
+    }
+
+    /* Переключатель валют */
     .currency-bar {
       display: flex;
       justify-content: flex-end;
-      padding: 10px 20px 0;
+      padding: 10px 15px;
     }
 
     .currency-switch {
       display: flex;
-      background: var(--card-bg);
-      border-radius: 6px;
-      padding: 2px;
+      border: 1px solid var(--window-border);
+      background: #111;
     }
 
     .currency-btn {
       border: none;
       background: none;
-      color: #888;
-      padding: 4px 10px;
+      color: var(--dim-text);
+      padding: 6px 12px;
       font-size: 0.8rem;
       cursor: pointer;
-      border-radius: 4px;
       font-weight: bold;
     }
 
     .currency-btn.active {
-      background: var(--accent-color);
+      background: var(--text-color);
       color: #000;
     }
 
-    /* Каталог товаров */
+    /* Сетка товаров (Окна) */
     .grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -97,40 +109,82 @@
       padding: 15px;
     }
 
-    .card {
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Стилизация карточки под окно программы */
+    .win-window {
       background: var(--card-bg);
-      border-radius: 12px;
+      border: 1px solid var(--window-border);
+      border-radius: 4px;
       overflow: hidden;
       cursor: pointer;
-      border: 1px solid var(--border-color);
+      margin-bottom: 15px;
     }
 
-    .card img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
+    .win-titlebar {
+      background: #1c1c1c;
+      padding: 5px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--window-border);
     }
 
-    .card-info {
-      padding: 10px;
+    .win-title {
+      font-size: 0.7rem;
+      color: var(--dim-text);
+      text-transform: lowercase;
     }
 
-    .card-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 5px;
+    .win-controls {
+      display: flex;
+      gap: 4px;
     }
 
-    .card-price {
-      font-size: 0.85rem;
+    .win-dot {
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--window-border);
+      background: #222;
+      display: inline-block;
+      font-size: 8px;
+      line-height: 8px;
+      text-align: center;
       color: #aaa;
+    }
+
+    .win-body img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .win-footer-btn {
+      width: 100%;
+      padding: 8px;
+      background: #181818;
+      border: none;
+      border-top: 1px solid var(--window-border);
+      color: var(--text-color);
+      font-size: 0.85rem;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .win-footer-btn:hover {
+      background: #252525;
     }
 
     /* Модальные окна */
     .modal {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.9);
       display: none;
       justify-content: center;
       align-items: flex-end;
@@ -142,13 +196,12 @@
     }
 
     .modal-content {
-      background: var(--bg-color);
+      background: #0d0d0d;
       width: 100%;
       max-height: 90vh;
-      border-radius: 20px 20px 0 0;
+      border-top: 2px solid var(--window-border);
       padding: 20px;
       overflow-y: auto;
-      border-top: 1px solid var(--border-color);
       position: relative;
     }
 
@@ -156,182 +209,249 @@
       position: absolute;
       top: 15px;
       right: 20px;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       cursor: pointer;
-      color: #888;
+      color: var(--dim-text);
+      background: #1a1a1a;
+      border: 1px solid var(--window-border);
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* Слайдер доп. фото */
+    /* Галерея в модалке */
     .gallery {
       display: flex;
       gap: 10px;
       overflow-x: auto;
       margin-bottom: 15px;
+      padding-bottom: 5px;
     }
 
     .gallery img {
-      width: 200px;
-      height: 260px;
+      width: 180px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 8px;
+      border: 1px solid var(--window-border);
     }
 
-    /* Размеры */
+    /* Стили кнопок размеров */
     .sizes {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin: 15px 0;
     }
 
     .size-btn {
-      padding: 8px 16px;
-      border: 1px solid var(--border-color);
-      background: var(--card-bg);
+      padding: 8px 14px;
+      border: 1px solid var(--window-border);
+      background: #111;
       color: #fff;
-      border-radius: 6px;
       cursor: pointer;
+      font-size: 0.8rem;
     }
 
     .size-btn.selected {
-      background: var(--btn-bg);
-      color: var(--btn-text);
+      background: #fff;
+      color: #000;
       font-weight: bold;
     }
 
     .action-btn {
       width: 100%;
-      padding: 14px;
-      background: var(--btn-bg);
-      color: var(--btn-text);
+      padding: 12px;
+      background: #fff;
+      color: #000;
       border: none;
-      border-radius: 10px;
       font-weight: bold;
-      font-size: 1rem;
+      text-transform: uppercase;
       cursor: pointer;
       margin-top: 10px;
+      letter-spacing: 1px;
     }
 
-    /* Корзина и форма */
+    /* Корзина и Форма */
     .cart-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10px 0;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid #222;
+      font-size: 0.9rem;
     }
 
     .form-group {
-      margin-top: 15px;
+      margin-top: 12px;
     }
 
     .form-group label {
       display: block;
-      font-size: 0.8rem;
-      color: #aaa;
-      margin-bottom: 5px;
+      font-size: 0.75rem;
+      color: var(--dim-text);
+      margin-bottom: 4px;
+      text-transform: uppercase;
     }
 
     .form-group input, .form-group textarea {
       width: 100%;
       padding: 10px;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
+      background: #111;
+      border: 1px solid var(--window-border);
       color: #fff;
       outline: none;
+      font-size: 0.9rem;
     }
 
-    .info-block {
-      margin-top: 25px;
-      padding-top: 15px;
-      border-top: 1px solid var(--border-color);
-      font-size: 0.8rem;
-      color: #888;
-      line-height: 1.4;
+    /* Бегущая строка (Марки) внизу */
+    .marquee-container {
+      border-top: 1px solid var(--window-border);
+      border-bottom: 1px solid var(--window-border);
+      background: #080808;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 8px 0;
+      margin-top: 20px;
+      font-size: 0.75rem;
+      color: var(--dim-text);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .marquee-text {
+      display: inline-block;
+      animation: marquee 25s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+
+    .footer-info {
+      padding: 20px 15px;
+      font-size: 0.75rem;
+      color: var(--dim-text);
+      line-height: 1.5;
     }
   </style>
 </head>
 <body>
 
+  <!-- Шапка -->
   <header>
-    <button class="nav-btn" onclick="showCatalog()">Каталог</button>
-    <div class="logo">ASTO</div>
-    <button class="nav-btn" onclick="openCart()">Корзина (<span id="cart-count">0</span>)</button>
+    <button class="nav-link" onclick="openCatalog()">Каталог.exe</button>
+    <div class="central-logo">
+      <img src="https://api.iconify.design/lucide:user.svg" alt="logo">
+    </div>
+    <button class="nav-link" onclick="openCart()">Корзина.exe (<span id="cart-count">0</span>)</button>
   </header>
 
+  <!-- Переключатель валюты -->
   <div class="currency-bar">
     <div class="currency-switch">
-      <button class="currency-btn active" id="btn-byn" onclick="setCurrency('BYN')">BYN</button>
-      <button class="currency-btn" id="btn-rub" onclick="setCurrency('RUB')">RUB</button>
+      <button class="currency-btn active" id="btn-rub" onclick="setCurrency('RUB')">RUB</button>
+      <button class="currency-btn" id="btn-byn" onclick="setCurrency('BYN')">BYN</button>
     </div>
   </div>
 
-  <!-- Витрина товаров -->
+  <!-- Список товаров (Окна) -->
   <div class="grid" id="product-grid"></div>
 
-  <!-- Модалка детального просмотра товара -->
+  <!-- Бегущая строка в стиле бренда -->
+  <div class="marquee-container">
+    <div class="marquee-text">
+      ХАРДКОРНЫЙ ЭГОИЗМ // МИНСК // 2026 // ХАРДКОРНЫЙ ЭГОИЗМ // МИНСК // 2026 // ХАРДКОРНЫЙ ЭГОИЗМ // МИНСК // 2026 // 
+    </div>
+  </div>
+
+  <div class="footer-info">
+    Kira Kalcheuski — Независимый арт проект созданный в 2023 году в Могилёве Республика Беларусь. Находясь на границе стритвира и высокой моды, я создаю вещи вдохновленные психологией и внутренними переживаниями человека, старым интернетом, постсоветской тоской и самоиронией.<br><br>
+    все права защищены
+  </div>
+
+  <!-- Модальное окно товара -->
   <div class="modal" id="product-modal">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal('product-modal')">&times;</span>
-      <div class="gallery" id="modal-gallery"></div>
-      <h2 id="modal-title"></h2>
-      <p id="modal-price" style="margin: 10px 0; color: #aaa;"></p>
-      <p id="modal-desc" style="font-size: 0.9rem; line-height: 1.4;"></p>
+      <div class="close-btn" onclick="closeModal('product-modal')">&times;</div>
+      
+      <div class="win-window" style="margin-bottom: 15px;">
+        <div class="win-titlebar">
+          <span class="win-title" id="modal-window-title">viewer.exe</span>
+          <div class="win-controls">
+            <span class="win-dot">_</span>
+            <span class="win-dot">□</span>
+            <span class="win-dot">×</span>
+          </div>
+        </div>
+        <div class="win-body">
+          <div class="gallery" id="modal-gallery"></div>
+        </div>
+      </div>
+
+      <h2 id="modal-title" style="font-size: 1.1rem; margin-bottom: 5px;"></h2>
+      <p id="modal-price" style="font-size: 0.85rem; color: var(--dim-text); margin-bottom: 10px;"></p>
+      <p id="modal-desc" style="font-size: 0.85rem; line-height: 1.4; color: #ccc;"></p>
 
       <div style="margin-top: 15px;">
-        <label style="font-size: 0.85rem; color: #aaa;">Выберите размер:</label>
+        <label style="font-size: 0.75rem; color: var(--dim-text);">ВЫБЕРИТЕ РАЗМЕР:</label>
         <div class="sizes" id="modal-sizes"></div>
       </div>
 
-      <button class="action-btn" onclick="addToCart()">Добавить в корзину</button>
+      <button class="action-btn" onclick="addToCart()">В корзину</button>
+      
+      <p style="font-size: 0.7rem; color: var(--dim-text); margin-top: 15px; line-height: 1.3;">
+        *Данная вещь находится в статусе предзаказа.<br>Отправка предзаказов в течении 30ти дней с момента оформления.
+      </p>
     </div>
   </div>
 
-  <!-- Модалка корзины -->
+  <!-- Модальное окно корзины -->
   <div class="modal" id="cart-modal">
     <div class="modal-content">
-      <span class="close-btn" onclick="closeModal('cart-modal')">&times;</span>
-      <h2>Корзина</h2>
-      <div id="cart-items" style="margin-top: 15px;"></div>
+      <div class="close-btn" onclick="closeModal('cart-modal')">&times;</div>
+      <h2 style="font-size: 1.1rem; margin-bottom: 15px;">КОРЗИНА.EXE</h2>
+      
+      <div id="cart-items"></div>
 
-      <form id="order-form" style="margin-top: 20px;">
+      <form id="order-form" style="margin-top: 15px;">
         <div class="form-group">
           <label>ФИО</label>
           <input type="text" id="fio" required placeholder="Иванов Иван Иванович">
         </div>
         <div class="form-group">
           <label>Номер телефона</label>
-          <input type="tel" id="phone" required placeholder="+375 / +7 ...">
+          <input type="tel" id="phone" required placeholder="+7 / +375 ...">
         </div>
         <div class="form-group">
           <label>Страна</label>
-          <input type="text" id="country" required placeholder="Беларусь / Россия">
+          <input type="text" id="country" required placeholder="Россия / Беларусь">
         </div>
         <div class="form-group">
           <label>Город</label>
-          <input type="text" id="city" required placeholder="Минск / Москва">
+          <input type="text" id="city" required placeholder="Москва / Минск">
         </div>
         <div class="form-group">
-          <label>Адрес ПВЗ СДЭК (РФ) / Европочты (РБ)</label>
+          <label>Адрес ПВЗ СДЭК(РФ) / Европочты(РБ)</label>
           <input type="text" id="address" required placeholder="Укажите адрес отделения">
         </div>
         <div class="form-group">
-          <label>Username Telegram</label>
+          <label>Username телеграмм</label>
           <input type="text" id="telegram" required placeholder="@username">
         </div>
         <div class="form-group">
           <label>Комментарий</label>
-          <textarea id="comment" rows="2" placeholder="Пожелания к заказу"></textarea>
+          <textarea id="comment" rows="2" placeholder="Ваши пожелания"></textarea>
         </div>
 
-        <button type="button" class="action-btn" onclick="submitOrder()">Оформить заказ</button>
+        <button type="button" class="action-btn" style="margin-top: 20px;" onclick="submitOrder()">Оформить заказ</button>
       </form>
 
-      <div class="info-block">
+      <div class="footer-info" style="border-top: 1px solid #222; margin-top: 20px;">
         <strong>Условия доставки и возврата:</strong><br>
-        • Доставка осуществляется через СДЭК (по РФ) и Европочту (по РБ).<br>
-        • Сроки отправки: 1–3 рабочих дня с момента подтверждения оплаты.<br>
-        • Возврат и обмен возможен в течение 14 дней с момента получения при сохранении товарного вида.
+        • Доставка СДЭК (РФ) / Европочта (РБ).<br>
+        • Возврат и обмен возможен в течение 14 дней.
       </div>
     </div>
   </div>
@@ -340,34 +460,33 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // Курс конвертации (1 BYN = 29.5 RUB)
-    const EXCHANGE_RATE = 29.5; 
-    let currentCurrency = 'BYN';
+    const EXCHANGE_RATE = 29.5; // 1 BYN = 29.5 RUB (если базовая цена в RUB)
+    let currentCurrency = 'RUB';
     let currentProduct = null;
     let selectedSize = null;
     let cart = [];
 
+    // Базовые товары (цены указаны в RUB, при переключении на BYN пересчитываются)
     const products = [
       {
         id: 1,
-        name: "Matte Black Jacket",
-        priceBYN: 280,
-        desc: "Матовая куртка плотного кроя с объёмной вышивкой и прорезиненными элементами.",
+        filename: "Шапка «Грязь+».png",
+        priceRUB: 1500,
+        desc: "Вязаная шапка с вышивкой и дистресс эффектом.\nСостав: 70% акрил 30% шерсть",
         images: [
-          "https://via.placeholder.com/400x533/1a1a1a/ffffff?text=Main+Photo",
-          "https://via.placeholder.com/400x533/222222/ffffff?text=Detail+1",
-          "https://via.placeholder.com/400x533/333333/ffffff?text=Detail+2"
+          "https://via.placeholder.com/400x400/151515/ffffff?text=Beanie+1",
+          "https://via.placeholder.com/400x400/222222/ffffff?text=Detail+1"
         ],
-        sizes: ["S", "M", "L", "XL"]
+        sizes: ["ONE SIZE"]
       },
       {
         id: 2,
-        name: "Distressed Beanie Grey",
-        priceBYN: 90,
-        desc: "Шапка с эффектом потертости и вышитыми патчами.",
+        filename: "Шапка «Красное».png",
+        priceRUB: 1500,
+        desc: "Вязаная шапка с символической вышивкой.\nСостав: 70% акрил 30% шерсть",
         images: [
-          "https://via.placeholder.com/400x533/252525/ffffff?text=Beanie+Main",
-          "https://via.placeholder.com/400x533/353535/ffffff?text=Beanie+Detail"
+          "https://via.placeholder.com/400x400/151515/ffffff?text=Beanie+2",
+          "https://via.placeholder.com/400x400/222222/ffffff?text=Detail+2"
         ],
         sizes: ["ONE SIZE"]
       }
@@ -377,17 +496,24 @@
       const grid = document.getElementById('product-grid');
       grid.innerHTML = '';
       products.forEach(p => {
-        const price = currentCurrency === 'BYN' 
-          ? `${p.priceBYN} BYN` 
-          : `${Math.round(p.priceBYN * EXCHANGE_RATE)} RUB`;
+        const price = currentCurrency === 'RUB' 
+          ? `${p.priceRUB} RUB` 
+          : `${Math.round(p.priceRUB / EXCHANGE_RATE)} BYN`;
 
         grid.innerHTML += `
-          <div class="card" onclick="openProduct(${p.id})">
-            <img src="${p.images[0]}" alt="${p.name}">
-            <div class="card-info">
-              <div class="card-title">${p.name}</div>
-              <div class="card-price">${price}</div>
+          <div class="win-window" onclick="openProduct(${p.id})">
+            <div class="win-titlebar">
+              <span class="win-title">${p.filename}</span>
+              <div class="win-controls">
+                <span class="win-dot">-</span>
+                <span class="win-dot">□</span>
+                <span class="win-dot">×</span>
+              </div>
             </div>
+            <div class="win-body">
+              <img src="${p.images[0]}" alt="${p.filename}">
+            </div>
+            <button class="win-footer-btn">${price}</button>
           </div>
         `;
       });
@@ -395,8 +521,8 @@
 
     function setCurrency(curr) {
       currentCurrency = curr;
-      document.getElementById('btn-byn').classList.toggle('active', curr === 'BYN');
       document.getElementById('btn-rub').classList.toggle('active', curr === 'RUB');
+      document.getElementById('btn-byn').classList.toggle('active', curr === 'BYN');
       renderProducts();
       updateCartDisplay();
     }
@@ -405,12 +531,13 @@
       currentProduct = products.find(p => p.id === id);
       selectedSize = null;
 
-      document.getElementById('modal-title').innerText = currentProduct.name;
+      document.getElementById('modal-window-title').innerText = currentProduct.filename;
+      document.getElementById('modal-title').innerText = currentProduct.filename.replace('.png', '');
       document.getElementById('modal-desc').innerText = currentProduct.desc;
       
-      const price = currentCurrency === 'BYN' 
-        ? `${currentProduct.priceBYN} BYN` 
-        : `${Math.round(currentProduct.priceBYN * EXCHANGE_RATE)} RUB`;
+      const price = currentCurrency === 'RUB' 
+        ? `PREORDER* ${currentProduct.priceRUB} RUB` 
+        : `PREORDER* ${Math.round(currentProduct.priceRUB / EXCHANGE_RATE)} BYN`;
       document.getElementById('modal-price').innerText = price;
 
       const gallery = document.getElementById('modal-gallery');
@@ -432,7 +559,7 @@
 
     function addToCart() {
       if (!selectedSize) {
-        alert('Пожалуйста, выберите размер!');
+        alert('Выберите размер!');
         return;
       }
       cart.push({ ...currentProduct, size: selectedSize });
@@ -452,23 +579,23 @@
     function updateCartDisplay() {
       const container = document.getElementById('cart-items');
       if (cart.length === 0) {
-        container.innerHTML = '<p style="color: #666;">Корзина пуста</p>';
+        container.innerHTML = '<p style="color: var(--dim-text); font-size: 0.85rem;">Корзина пуста</p>';
         return;
       }
 
       container.innerHTML = cart.map((item, index) => {
-        const price = currentCurrency === 'BYN' 
-          ? `${item.priceBYN} BYN` 
-          : `${Math.round(item.priceBYN * EXCHANGE_RATE)} RUB`;
+        const price = currentCurrency === 'RUB' 
+          ? `${item.priceRUB} RUB` 
+          : `${Math.round(item.priceRUB / EXCHANGE_RATE)} BYN`;
         return `
           <div class="cart-item">
             <div>
-              <div><strong>${item.name}</strong></div>
-              <div style="font-size:0.8rem; color:#aaa;">Размер: ${item.size}</div>
+              <div><strong>${item.filename}</strong></div>
+              <div style="font-size:0.75rem; color:var(--dim-text);">Размер: ${item.size}</div>
             </div>
-            <div>
+            <div style="display: flex; align-items: center; gap: 10px;">
               <span>${price}</span>
-              <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; margin-left:10px; cursor:pointer;">✕</button>
+              <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer; font-size:1rem;">×</button>
             </div>
           </div>
         `;
@@ -485,9 +612,14 @@
       document.getElementById(id).classList.remove('active');
     }
 
+    function openCatalog() {
+      // Кнопка каталога (можно скроллить наверх)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function submitOrder() {
       if (cart.length === 0) {
-        alert('Ваша корзина пуста');
+        alert('Корзина пуста');
         return;
       }
 
@@ -500,17 +632,16 @@
       const comment = document.getElementById('comment').value;
 
       if (!fio || !phone || !country || !city || !address || !telegram) {
-        alert('Пожалуйста, заполните все обязательные поля.');
+        alert('Заполните обязательные поля формы.');
         return;
       }
 
       const orderData = {
         customer: { fio, phone, country, city, address, telegram, comment },
         currency: currentCurrency,
-        items: cart.map(i => ({ name: i.name, size: i.size, price: i.priceBYN }))
+        items: cart.map(i => ({ name: i.filename, size: i.size, price: currentCurrency === 'RUB' ? i.priceRUB : Math.round(i.priceRUB / EXCHANGE_RATE) }))
       };
 
-      // Отправляем данные бота через WebApp API
       tg.sendData(JSON.stringify(orderData));
       tg.close();
     }
