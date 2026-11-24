@@ -466,7 +466,6 @@
       }
     }
 
-    const EXCHANGE_RATE = 29.5; 
     let currentCurrency = 'RUB';
     let currentProduct = null;
     let selectedSize = null;
@@ -475,18 +474,47 @@
     const products = [
       {
         id: 1,
-        filename: "Шапка «Грязь+».png",
-        priceRUB: 1500,
-        desc: "Вязаная шапка с вышивкой и дистресс эффектом.\nСостав: 70% акрил 30% шерсть",
-        images: ["t1.png", "t1_2.png"],
+        filename: "hat «ГРЯЗЬ+»",
+        priceRUB: 2000,
+        priceBYN: 73,
+        desc: "Вязаная шапка с вышивкой и дистресс эффектом.\\nСостав: 70% акрил 30% шерсть",
+        images: ["1.png"],
         sizes: ["ONE SIZE"]
       },
       {
         id: 2,
-        filename: "Шапка «Красное».png",
-        priceRUB: 1500,
-        desc: "Вязаная шапка с символической вышивкой.\nСостав: 70% акрил 30% шерсть",
-        images: ["t2.png"],
+        filename: "hat «Розовое»",
+        priceRUB: 1800,
+        priceBYN: 65,
+        desc: "Вязаная шапка с вышивкой.\\nСостав: 70% акрил 30% шерсть",
+        images: ["2.png"],
+        sizes: ["ONE SIZE"]
+      },
+      {
+        id: 3,
+        filename: "hat «ГРЯЗЬ»",
+        priceRUB: 1800,
+        priceBYN: 65,
+        desc: "Вязаная шапка.\\nСостав: 70% акрил 30% шерсть",
+        images: ["3.png"],
+        sizes: ["ONE SIZE"]
+      },
+      {
+        id: 4,
+        filename: "hat «KIRA» black",
+        priceRUB: 1800,
+        priceBYN: 65,
+        desc: "Вязаная шапка KIRA в чёрном цвете.\\nСостав: 70% акрил 30% шерсть",
+        images: ["4.png"],
+        sizes: ["ONE SIZE"]
+      },
+      {
+        id: 5,
+        filename: "hat «KIRA» white",
+        priceRUB: 1800,
+        priceBYN: 65,
+        desc: "Вязаная шапка KIRA в белом цвете.\\nСостав: 70% акрил 30% шерсть",
+        images: ["5.png"],
         sizes: ["ONE SIZE"]
       }
     ];
@@ -498,7 +526,7 @@
       products.forEach(p => {
         const price = currentCurrency === 'RUB' 
           ? `${p.priceRUB} RUB` 
-          : `${Math.round(p.priceRUB / EXCHANGE_RATE)} BYN`;
+          : `${p.priceBYN} BYN`;
 
         grid.innerHTML += `
           <div class="win-window" onclick="openProduct(${p.id})">
@@ -537,7 +565,7 @@
       
       const price = currentCurrency === 'RUB' 
         ? `PREORDER* ${currentProduct.priceRUB} RUB` 
-        : `PREORDER* ${Math.round(currentProduct.priceRUB / EXCHANGE_RATE)} BYN`;
+        : `PREORDER* ${currentProduct.priceBYN} BYN`;
       document.getElementById('modal-price').innerText = price;
 
       const gallery = document.getElementById('modal-gallery');
@@ -588,7 +616,7 @@
       container.innerHTML = cart.map((item, index) => {
         const price = currentCurrency === 'RUB' 
           ? `${item.priceRUB} RUB` 
-          : `${Math.round(item.priceRUB / EXCHANGE_RATE)} BYN`;
+          : `${item.priceBYN} BYN`;
         return `
           <div class="cart-item">
             <div>
@@ -640,7 +668,7 @@
       const orderData = {
         customer: { fio, phone, country, city, address, telegram, comment },
         currency: currentCurrency,
-        items: cart.map(i => ({ name: i.filename, size: i.size, price: currentCurrency === 'RUB' ? i.priceRUB : Math.round(i.priceRUB / EXCHANGE_RATE) }))
+        items: cart.map(i => ({ name: i.filename, size: i.size, price: currentCurrency === 'RUB' ? i.priceRUB : i.priceBYN }))
       };
 
       if (tg && tg.sendData) {
