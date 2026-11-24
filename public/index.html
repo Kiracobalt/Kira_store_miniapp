@@ -219,18 +219,72 @@
 
     .gallery {
       display: flex;
-      gap: 10px;
-      overflow-x: auto;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
       margin-bottom: 15px;
-      padding-bottom: 5px;
+      padding: 5px 0;
     }
 
     .gallery img {
-      width: 180px;
-      height: 180px;
-      object-fit: cover;
+      display: block;
+      width: min(100%, 440px);
+      height: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      margin: 0 auto;
       border: 1px solid var(--window-border);
       background: #1a1a1a;
+      cursor: zoom-in;
+    }
+
+    /* Полноэкранный просмотр изображения */
+    .image-zoom {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.96);
+      overflow: auto;
+      cursor: zoom-out;
+    }
+
+    .image-zoom.active {
+      display: flex;
+    }
+
+    .image-zoom img {
+      display: block;
+      max-width: 96vw;
+      max-height: 92vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      cursor: zoom-in;
+      transition: transform 0.2s ease;
+      transform-origin: center center;
+    }
+
+    .image-zoom img.zoomed {
+      transform: scale(1.6);
+      cursor: zoom-out;
+    }
+
+    .image-zoom-close {
+      position: fixed;
+      top: 16px;
+      right: 18px;
+      z-index: 501;
+      width: 38px;
+      height: 38px;
+      border: 1px solid #666;
+      background: #111;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
     }
 
     .sizes {
@@ -398,6 +452,12 @@
         *Данная вещь находится в статусе предзаказа.<br>Отправка предзаказов в течении 30ти дней с момента оформления.
       </p>
     </div>
+  </div>
+
+  <!-- Полноэкранный просмотр фото товара -->
+  <div class="image-zoom" id="image-zoom" onclick="closeImageZoom()">
+    <button class="image-zoom-close" type="button" aria-label="Закрыть" onclick="event.stopPropagation(); closeImageZoom();">&times;</button>
+    <img id="zoomed-product-image" src="" alt="Увеличенное изображение товара" onclick="event.stopPropagation(); this.classList.toggle('zoomed');">
   </div>
 
   <!-- Модальное окно корзины -->
@@ -571,7 +631,7 @@
 
       const gallery = document.getElementById('modal-gallery');
       gallery.innerHTML = currentProduct.images.map(img => 
-        `<img src="${img}" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=Photo'">`
+        `<img src="${img}" alt="${currentProduct.filename}" onclick="openImageZoom(this.src)" onerror="this.src='https://via.placeholder.com/400x400/222/fff?text=Photo'">`
       ).join('');
 
       const sizesDiv = document.getElementById('modal-sizes');
@@ -580,6 +640,24 @@
       ).join('');
 
       document.getElementById('product-modal').classList.add('active');
+    }
+
+    function openImageZoom(src) {
+      const overlay = document.getElementById('image-zoom');
+      const image = document.getElementById('zoomed-product-image');
+      if (!overlay || !image) return;
+      image.src = src;
+      image.classList.remove('zoomed');
+      overlay.classList.add('active');
+    }
+
+    function closeImageZoom() {
+      const overlay = document.getElementById('image-zoom');
+      const image = document.getElementById('zoomed-product-image');
+      if (!overlay || !image) return;
+      overlay.classList.remove('active');
+      image.classList.remove('zoomed');
+      image.src = '';
     }
 
     function selectSize(btn, size) {
