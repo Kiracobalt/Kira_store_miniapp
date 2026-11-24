@@ -24,9 +24,23 @@
 
     body {
       background-color: var(--bg-color);
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.48)),
+        url("wll.png");
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
       color: var(--text-color);
       padding-bottom: 50px;
       overflow-x: hidden;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+        background-position: center top;
+      }
     }
 
     /* Шапка */
