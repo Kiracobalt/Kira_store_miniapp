@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASTO STUDIO // EXECUTABLE</title>
+  <title>KIRA KALCHEUSKI // EXECUTABLE</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -342,7 +342,7 @@
   <header>
     <button class="nav-link" onclick="openCatalog()">Каталог.exe</button>
     <div class="central-logo">
-      <img src="logo.png" alt="logo" onerror="this.src='https://via.placeholder.com/65/000000/ffffff?text=ASTO'">
+      <img src="logo.png" alt="logo" onerror="this.src='https://via.placeholder.com/65/000000/ffffff?text=KIRA'">
     </div>
     <button class="nav-link" onclick="openCart()">Корзина.exe (<span id="cart-count">0</span>)</button>
   </header>
@@ -430,6 +430,13 @@
         <div class="form-group">
           <label>Город</label>
           <input type="text" id="city" required placeholder="Москва / Минск">
+        </div>
+        <div class="form-group" id="delivery-info">
+          <label>Доставка</label>
+          <div id="delivery-description" style="padding:10px; background:#111; border:1px solid var(--window-border); color:#fff; font-size:0.9rem; line-height:1.5;">
+            Беларусь — Европочта: 6 BYN<br>
+            Россия — СДЭК: от 500 RUB (точная стоимость рассчитывается при оформлении заказа)
+          </div>
         </div>
         <div class="form-group">
           <label>Адрес ПВЗ СДЭК(РФ) / Европочты(РБ)</label>
@@ -657,6 +664,12 @@
       const country = document.getElementById('country').value;
       const city = document.getElementById('city').value;
       const address = document.getElementById('address').value;
+      const countryValue = country.trim().toLowerCase();
+      const delivery = /^(рб|беларусь)$/.test(countryValue)
+        ? 'Европочта — 6 BYN'
+        : /^(рф|россия|российская федерация)$/.test(countryValue)
+          ? 'СДЭК — от 500 RUB (точная стоимость рассчитывается при оформлении заказа)'
+          : 'Способ и стоимость доставки уточняются по стране и городу';
       const telegram = document.getElementById('telegram').value;
       const comment = document.getElementById('comment').value;
 
@@ -666,7 +679,7 @@
       }
 
       const orderData = {
-        customer: { fio, phone, country, city, address, telegram, comment },
+        customer: { fio, phone, country, city, address, telegram, comment, delivery },
         currency: currentCurrency,
         items: cart.map(i => ({ name: i.filename, size: i.size, price: currentCurrency === 'RUB' ? i.priceRUB : i.priceBYN }))
       };
@@ -680,9 +693,26 @@
       }
     }
 
+    // Обновление подсказки о доставке по выбранной стране
+    function updateDeliveryInfo() {
+      const countryInput = document.getElementById('country');
+      const description = document.getElementById('delivery-description');
+      if (!countryInput || !description) return;
+      const country = countryInput.value.trim().toLowerCase();
+      if (/^(рб|беларусь)$/.test(country)) {
+        description.innerText = 'Европочта — 6 BYN';
+      } else if (/^(рф|россия|российская федерация)$/.test(country)) {
+        description.innerText = 'СДЭК — от 500 RUB (точная стоимость рассчитывается при оформлении заказа)';
+      } else {
+        description.innerHTML = 'Беларусь — Европочта: 6 BYN<br>Россия — СДЭК: от 500 RUB (точная стоимость рассчитывается при оформлении заказа)';
+      }
+    }
+
     // Запуск первичного рендеринга
     document.addEventListener("DOMContentLoaded", function() {
       renderProducts();
+      const countryInput = document.getElementById('country');
+      if (countryInput) countryInput.addEventListener('input', updateDeliveryInfo);
     });
   </script>
 </body>
