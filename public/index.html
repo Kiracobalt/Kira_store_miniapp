@@ -344,6 +344,36 @@
       font-size: 0.9rem;
     }
 
+    .return-link {
+      color: #fff;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .return-modal {
+      z-index: 300;
+      align-items: center;
+      padding: 18px;
+    }
+
+    .return-modal .modal-content {
+      width: 100%;
+      max-width: 480px;
+      max-height: 85vh;
+      border: 1px solid var(--window-border);
+      padding: 24px 20px;
+    }
+
+    .return-modal-text {
+      color: #ccc;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      padding-top: 12px;
+      padding-right: 8px;
+    }
+
     .form-group {
       margin-top: 12px;
     }
@@ -525,8 +555,17 @@
       <div class="footer-info" style="border-top: 1px solid #222; margin-top: 20px;">
         <strong>Условия доставки и возврата:</strong><br>
         • Доставка СДЭК (РФ) / Европочта (РБ).<br>
-        • Возврат и обмен возможен в течение 14 дней.
+        • <span class="return-link" role="button" tabindex="0" onclick="openReturnTerms()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openReturnTerms();}">Условия возврата</span>
       </div>
+    </div>
+  </div>
+
+  <!-- Условия возврата -->
+  <div class="modal return-modal" id="return-modal" onclick="if(event.target===this) closeModal('return-modal')">
+    <div class="modal-content">
+      <button class="close-btn" type="button" aria-label="Закрыть" onclick="closeModal('return-modal')">&times;</button>
+      <h2 style="font-size: 1.1rem; margin-bottom: 8px;">УСЛОВИЯ ВОЗВРАТА</h2>
+      <p class="return-modal-text">Возврат возможен только при наличии заводского брака, несоответствия размера и только при условии целостности заводской упаковки в течение 14 рабочих дней.<br><br>По всем вопросам писать менеджеру, указанному в ТГК.</p>
     </div>
   </div>
 
@@ -729,6 +768,10 @@
       cart.splice(index, 1);
       updateCartCount();
       updateCartDisplay();
+    }
+
+    function openReturnTerms() {
+      document.getElementById('return-modal').classList.add('active');
     }
 
     function closeModal(id) {
